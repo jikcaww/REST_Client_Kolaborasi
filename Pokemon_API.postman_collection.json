@@ -1,0 +1,207 @@
+{
+	"info": {
+		"_postman_id": "pokemon-rest-client-001",
+		"name": "Pokemon REST Client API",
+		"description": "Collection untuk testing Pokemon API dengan API Key",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Pokemon by ID",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-Key",
+						"value": "45085cc92b974b4ba1935516454e8ec7",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{api_base_url}}/pokemon/{{pokemon_id}}",
+					"host": [
+						"{{api_base_url}}"
+					],
+					"path": [
+						"pokemon",
+						"{{pokemon_id}}"
+					]
+				},
+				"description": "Mendapatkan data Pokemon berdasarkan ID"
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Set API Key",
+							"pm.environment.set(\"api_key\", \"45085cc92b974b4ba1935516454e8ec7\");",
+							"pm.environment.set(\"api_base_url\", \"https://pokeapi.co/api/v2\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has Pokemon data\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData).to.have.property('name');",
+							"    pm.expect(jsonData).to.have.property('types');",
+							"});",
+							"",
+							"// Save Pokemon data",
+							"const jsonData = pm.response.json();",
+							"pm.environment.set(\"pokemon_name\", jsonData.name);",
+							"pm.environment.set(\"pokemon_id\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			]
+		},
+		{
+			"name": "Get Pokemon by Name",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-Key",
+						"value": "45085cc92b974b4ba1935516454e8ec7",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{api_base_url}}/pokemon/{{pokemon_name}}",
+					"host": [
+						"{{api_base_url}}"
+					],
+					"path": [
+						"pokemon",
+						"{{pokemon_name}}"
+					]
+				},
+				"description": "Mendapatkan data Pokemon berdasarkan nama"
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Pokemon name matches\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.name).to.equal(pm.environment.get(\"pokemon_name\").toLowerCase());",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			]
+		},
+		{
+			"name": "Get Random Pokemon",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-Key",
+						"value": "45085cc92b974b4ba1935516454e8ec7",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{api_base_url}}/pokemon/{{$randomInt}}",
+					"host": [
+						"{{api_base_url}}"
+					],
+					"path": [
+						"pokemon",
+						"{{$randomInt}}"
+					]
+				},
+				"description": "Mendapatkan Pokemon random (ID 1-898)"
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Generate random Pokemon ID (1-898)",
+							"const randomId = Math.floor(Math.random() * 898) + 1;",
+							"pm.environment.set(\"random_pokemon_id\", randomId);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has Pokemon data\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData).to.have.property('name');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "api_base_url",
+			"value": "https://pokeapi.co/api/v2",
+			"type": "string"
+		},
+		{
+			"key": "api_key",
+			"value": "45085cc92b974b4ba1935516454e8ec7",
+			"type": "string"
+		},
+		{
+			"key": "pokemon_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "pokemon_name",
+			"value": "bulbasaur",
+			"type": "string"
+		}
+	]
+}
+
