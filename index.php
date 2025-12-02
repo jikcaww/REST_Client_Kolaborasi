@@ -27,6 +27,11 @@
                 <button id="randomBtn" onclick="getRandomPokemon()">
                     <span>🎲</span> Random
                 </button>
+                <a href="about.php" style="text-decoration: none;">
+                    <button type="button" style="background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%); color: white; height: 100%;">
+                        <span>ℹ️</span> Info
+                    </button>
+                </a>
             </div>
         </div>
 
